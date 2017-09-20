@@ -1,0 +1,12 @@
+.bookingTable{
+    text-align:center;
+    font-family: 'Lato Bold', sans-serif;
+    background-color: white;
+    border: 1px;
+}
+.bookingTable th{
+    background-color: #f9f9f9;
+}
+.bookingDetails{
+    background-color: lightgrey;
+}

@@ -1,19 +1,23 @@
 <!DOCTYPE html>
+{% load render_bundle from webpack_loader %}
+{% load static %}
 <html lang="en">
 <head>
+    <script src="{% static 'bower_components/jquery/dist/jquery.js'%}"></script>
+
     <meta charset="UTF-8">
-    <title>hey</title>
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.css' %}">
+    <title>Booking Items</title>
 </head>
 <body>
-{% if booking_items %}
-    <ul>
-    {% for item in booking_items %}
-        <li>{{ item.item.name }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No items are available.</p>
-{% endif %}
 
+    <h4>Booking Items</h4>
+
+    <div id="container">
+        {% render_bundle 'main' %}
+    </div>
+
+    <script src="{% static 'bower_components/react/react.js'%}"></script>
+    <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.js'%}"></script>
 </body>
 </html>
