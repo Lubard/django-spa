@@ -50,10 +50,24 @@ var BookingItemComponent = React.createClass ({
     render: function() {
         if (this.state.data) {
             var bookingNodes = this.state.data.map(function(bookingItem){
+                // Chekc the current customer
                 if (this.state.booking_item && bookingItem.id==this.state.booking_item.id){
+                    // Check if user Information Existed
+                    if (this.state.booking_item.booking.booker && this.state.booking_item.booking.booker.user){
+                        var user = this.state.booking_item.booking.booker.user;
+                        var userInfo = (
+                            <p>
+                                User: {user.first_name} {user.last_name}<br/>
+                                Email: {user.email}
+                            </p>
+                        )
+                    }
+
+
                     var bookingItemDetail = (
                         <tr className={styles.bookingDetails}>
                             <td colSpan="5">
+                                {userInfo}
                                 locked_piece_price:{this.state.booking_item.locked_piece_price}<br/>
                                 locked_total_price:{this.state.booking_item.locked_total_price}<br/>
                                 Spaces:{this.state.booking_item.item.spaces}<br/>
@@ -63,10 +77,10 @@ var BookingItemComponent = React.createClass ({
                     )
                 }
                 return (
-                    <tbody>
-                        <tr onClick={() => this.bookingSpecific(bookingItem.id)} >
-                            <th>{bookingItem.id}</th>
-                            <td>{bookingItem.booking.id}</td>
+                    <tbody key={bookingItem.id}>
+                        <tr onClick={() => this.bookingSpecific(bookingItem.id)}>
+                            <td>{bookingItem.id}</td>
+                            <td>{bookingItem.booking}</td>
                             <td>{bookingItem.quantity}</td>
                             <td>{bookingItem.item.name}</td>
                             <td>{bookingItem.item.venue.name}</td>
@@ -106,14 +120,14 @@ var Paginator = React.createClass({
     pagePrevious: function(){
         var page = this.props.page;
         if(this.props.data && this.props.page>1){
-            var page = page - 1;
+            page = page - 1;
         }
         this.props.onChange(page);
     },
     pageNext: function(){
         var page = this.props.page;
         if(this.props.data && this.props.data.length==20){
-            var page = this.props.page + 1;
+            page = this.props.page + 1;
         }
         this.props.onChange(page);
     },

@@ -9,8 +9,10 @@ from itertools import chain
 
 class Venue(models.Model):
     name = models.CharField(max_length=255, null=False)
+
     class Meta:
         db_table = 'venues'
+
 
 class Item(models.Model):
     venue = models.ForeignKey(Venue, related_name='items')
@@ -20,7 +22,7 @@ class Item(models.Model):
         db_table = 'items'
 
     def __unicode__(self):
-        return '%s' % (self.name)
+        return '%s' % self.name
 
 
 class Space(models.Model):
@@ -71,12 +73,22 @@ class BookingItemManager(models.Manager):
         if (query is None) or (''==query):
             return self
 
-        user = User.objects.filter(Q(first_name__contains=query)|Q(last_name__contains=query)|Q(email__contains=query))
-        return self.filter(Q(item__name__contains=query) |
-                           Q(booking__id__contains=query) |
-                           Q(item__venue__name__contains=query) |
-                           Q(booking__booker__user__id__in=user.values_list('id',flat=True))
-                           )
+        # Search by User Information
+        users = User.objects.filter(Q(first_name__contains=query)|
+                                   Q(last_name__contains=query)|
+                                   Q(email__contains=query))
+
+        # Search by Item Name, Venue Name
+        # Or Space Hour Price and Product Price
+        items = Item.objects.filter(Q(name__contains=query) |
+                                   Q(venue__name__contains=query) |
+                                   Q(spaces__hour_price__contains=query)|
+                                   Q(products__price__contains=query))
+
+        # Search by Booking Id
+        return self.filter(Q(booking__id__contains=query) |
+                           Q(item_id__in=items.values_list('id', flat=True)) |
+                           Q(booking__booker__user__id__in=users.values_list('id', flat=True)))
 
 
 class BookingItem(models.Model):

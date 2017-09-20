@@ -37,7 +37,7 @@ def index(request):
 
 class BookingItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = BookingItem.objects.all()
-    serializer_class = BookingItemSerializer
+    serializer_class = BookingItemDetailSerializer
     lookup_field = 'id'
 
 

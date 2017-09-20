@@ -1,9 +1,11 @@
 from rest_framework import serializers
 from .models import *
 
+
 class ItemSerializer(serializers.ModelSerializer):
     spaces = serializers.StringRelatedField(many=True, read_only=True)
     products = serializers.StringRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Item
         fields = ('id', 'name', 'venue', 'spaces', 'products')
@@ -23,10 +25,6 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ('item', 'price')
         depth = 1
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
 
 class BookerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,12 +41,22 @@ class BookingSerializer(serializers.ModelSerializer):
 
 
 class BookingItemSerializer(serializers.ModelSerializer):
-    booking = BookingSerializer()
     item = ItemSerializer()
-    # space = SpaceSerializer(source='item', many=True)
-    # product = ProductSerializer(source='item', many=True)
+
     class Meta:
         model = BookingItem
-        fields=('id','booking', 'item', 'quantity', 'locked_piece_price', 'locked_total_price', 'start_timestamp',
-                'end_timestamp')
+        fields=('id','booking', 'item', 'quantity')
+        lookup_field = 'id'
+
+
+class BookingItemDetailSerializer(serializers.ModelSerializer):
+    item = ItemSerializer()
+    booking = BookingSerializer()
+
+    class Meta:
+        model = BookingItem
+        fields = ('id', 'booking', 'item', 'quantity', 'locked_piece_price', 'locked_total_price', 'start_timestamp',
+                  'end_timestamp')
+
+        depth = 1
         lookup_field = 'id'
