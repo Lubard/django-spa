@@ -1,5 +1,4 @@
 .bookingTable{
-    align: center;
     text-align:center;
     font-family: 'Lato Bold', sans-serif;
     background-color: white;
@@ -7,6 +6,11 @@
 }
 .bookingTable th{
     width: 100px;
+    background-color: #f9f9f9;
+}
+
+.bookingTable thead th{
+    text-align: center;
     background-color: #f9f9f9;
 }
 

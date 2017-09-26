@@ -6,12 +6,11 @@ from django.template import loader
 from django.http import HttpResponse, JsonResponse
 from .models import *
 from rest_framework import status, generics
-from rest_framework.response import Response
 from serializer import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import BookingSearchForm
-from search_views.search import SearchListView
-from search_views.filters import BaseFilter
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 def index(request):
     # search_query = request.GET.get('search_text')
@@ -42,6 +41,7 @@ class BookingItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 def booking_item_list(request):
+
     search_query = request.GET.get('search_text')
     booking_items = BookingItem.objects.search_for(search_query).order_by('-quantity')
 

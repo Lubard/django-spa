@@ -50,7 +50,14 @@ var BookingItemComponent = React.createClass ({
     render: function() {
         if (this.state.data) {
             var bookingNodes = this.state.data.map(function(bookingItem){
-                // Chekc the current customer
+
+                // Return if no Item attached to the record
+                if (bookingItem.item==null){
+                    return
+                }
+
+
+                // Check the current customer
                 if (this.state.booking_item && bookingItem.id==this.state.booking_item.id){
                     // Check if user Information Existed
                     if (this.state.booking_item.booking.booker && this.state.booking_item.booking.booker.user){
@@ -90,7 +97,7 @@ var BookingItemComponent = React.createClass ({
                 );}.bind(this)
             )
         }else{
-            return (<tr><td colspan="5">No items are available.</td></tr>)
+            bookingNodes =  (<tr><td colSpan="5">No items are available.</td></tr>)
         }
         return (
             <div className="booking-list">
